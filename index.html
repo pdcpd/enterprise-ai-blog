@@ -492,6 +492,87 @@
         .empty-state-icon { font-size: 3rem; margin-bottom: 16px; }
         .empty-state p { font-size: 1rem; }
 
+        /* ===== Resource Cards ===== */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .resource-card {
+            background: var(--color-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+        }
+        .resource-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-border);
+            transform: translateY(-2px);
+        }
+        .resource-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .resource-icon.excel { background: #e8f5e9; }
+        .resource-icon.word { background: #e3f2fd; }
+        .resource-icon.pdf { background: #fce4ec; }
+        .resource-icon.ppt { background: #fff3e0; }
+        .resource-info { flex: 1; min-width: 0; }
+        .resource-info h4 {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .resource-info p {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            margin-bottom: 10px;
+        }
+        .resource-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            background: var(--color-primary);
+            color: #fff;
+            border-radius: 16px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: all var(--transition);
+        }
+        .resource-download:hover { background: var(--color-accent); color: #fff; }
+        .resource-section-title {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            color: var(--color-primary);
+            margin: 36px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-accent-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .resource-section-title:first-child { margin-top: 0; }
+        .resource-section-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            background: var(--color-accent);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-family: var(--font-sans);
+        }
+
         /* ===== Responsive ===== */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.75rem; }
@@ -506,6 +587,7 @@
             .about-page { padding: 24px 20px; }
             .header-inner { height: 56px; }
             .nav-link { padding: 6px 10px; font-size: 0.8rem; }
+            .resource-grid { grid-template-columns: 1fr; }
         }
 
         /* ===== Scrollbar ===== */
@@ -525,6 +607,7 @@
             </div>
             <nav>
                 <button class="nav-link" data-page="home" onclick="navigate('home')">首页</button>
+                <button class="nav-link" data-page="resources" onclick="navigate('resources')">资源</button>
                 <button class="nav-link" data-page="tags" onclick="navigate('tags')">标签</button>
                 <button class="nav-link" data-page="about" onclick="navigate('about')">关于</button>
             </nav>
@@ -538,6 +621,7 @@
     <footer class="site-footer">
         <div class="footer-links">
             <a href="javascript:void(0)" onclick="navigate('home')">首页</a>
+            <a href="javascript:void(0)" onclick="navigate('resources')">资源</a>
             <a href="javascript:void(0)" onclick="navigate('tags')">标签</a>
             <a href="javascript:void(0)" onclick="navigate('about')">关于</a>
         </div>
@@ -953,6 +1037,38 @@ PDCPD同时具备**轻量化**和**高强度**两个看似矛盾的特质，加�
         }
     ];
 
+    // ===== Resource Data =====
+    const resourceSections = [
+        {
+            title: '实战工具包',
+            badge: '10个模板',
+            icon: '🧰',
+            items: [
+                { name: '新公司业务筛选评估表', file: 'downloads/01_新公司业务筛选评估表.xlsx', type: 'excel', desc: '10个评估维度、自动计算公式、决策建议' },
+                { name: '新公司股权结构设计模板', file: 'downloads/02_新公司股权结构设计模板.docx', type: 'word', desc: '标准模板、法律条款Checklist' },
+                { name: '第一年启动预算计算器', file: 'downloads/03_第一年启动预算计算器.xlsx', type: 'excel', desc: '分级方案（5万/20万/50万）、自动合计' },
+                { name: '90天行动甘特图', file: 'downloads/04_90天行动甘特图.xlsx', type: 'excel', desc: '时间轴、负责人、关键产出' },
+                { name: 'AI工具选型清单2026', file: 'downloads/05_AI工具选型清单2026.pdf', type: 'pdf', desc: '6大类工具、选型建议' },
+                { name: '周报模板（向老板汇报专用）', file: 'downloads/06_周报模板_向老板汇报专用.docx', type: 'word', desc: '指标、进展、风险、计划四部分' },
+                { name: 'AI成熟度自评表', file: 'downloads/07_AI成熟度自评表.xlsx', type: 'excel', desc: '8个评估维度、自动评级' },
+                { name: '三年进化路线图模板', file: 'downloads/08_三年进化路线图模板.pptx', type: 'ppt', desc: 'L1/L2/L3三阶段详解' },
+                { name: '新老公司业务分流决策树', file: 'downloads/09_新老公司业务分流决策树.pdf', type: 'pdf', desc: '决策节点、安置方案、时间表' },
+                { name: '老员工安置方案模板', file: 'downloads/10_老员工安置方案模板.docx', type: 'word', desc: '三条出路方案、实施时间表' },
+            ]
+        },
+        {
+            title: '课程资料',
+            badge: '全25节',
+            icon: '📖',
+            items: [
+                { name: 'AI新公司计划·课程详细设计（全25节）', file: 'downloads/AI新公司计划_课程详细设计（全25节）.docx', type: 'word', desc: '完整课程设计文档' },
+                { name: 'AI新公司计划·课程设计 Part 1', file: 'downloads/AI新公司计划_课程详细设计_part1.docx', type: 'word', desc: '模块一认知篇 + 模块二战略篇' },
+                { name: 'AI新公司计划·课程设计 Part 2', file: 'downloads/AI新公司计划_课程详细设计_part2.docx', type: 'word', desc: '模块三操作篇 + 模块四交接篇' },
+                { name: 'AI新公司计划·课程设计 Part 3', file: 'downloads/AI新公司计划_课程详细设计_part3.docx', type: 'word', desc: '模块五升级篇' },
+            ]
+        }
+    ];
+
     // ===== Router =====
     let currentPage = 'home';
     let currentTag = null;
@@ -1003,6 +1119,9 @@ PDCPD同时具备**轻量化**和**高强度**两个看似矛盾的特质，加�
                 break;
             case 'about':
                 app.innerHTML = renderAboutPage();
+                break;
+            case 'resources':
+                app.innerHTML = renderResourcesPage();
                 break;
         }
     }
@@ -1202,6 +1321,39 @@ PDCPD同时具备**轻量化**和**高强度**两个看似矛盾的特质，加�
                         <p>欢迎交流讨论，如需合作请通过以下方式联系：</p>
                         <p>📧 Email: contact@example.com</p>
                         <p>🌐 Website: www.example.com</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderResourcesPage() {
+        const iconMap = { excel: '📊', word: '📄', pdf: '📕', ppt: '📽️' };
+        return `
+            <div class="main-content" style="grid-template-columns: 1fr;">
+                <div>
+                    <h1 style="font-family: var(--font-serif); font-size: 2rem; color: var(--color-primary); margin-bottom: 8px;">📂 资源下载中心</h1>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 36px;">「面向私企老板的AI转型与交接班」付费课程配套工具包与课程资料，全部免费下载。</p>
+                    ${resourceSections.map(section => `
+                        <div class="resource-section-title">
+                            ${section.icon} ${section.title}
+                            <span class="resource-section-badge">${section.badge}</span>
+                        </div>
+                        <div class="resource-grid">
+                            ${section.items.map(item => `
+                                <div class="resource-card">
+                                    <div class="resource-icon ${item.type}">${iconMap[item.type]}</div>
+                                    <div class="resource-info">
+                                        <h4>${item.name}</h4>
+                                        <p>${item.desc}</p>
+                                        <a href="${item.file}" download class="resource-download">⬇ 下载</a>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                    <div style="margin-top: 40px; padding: 24px; background: var(--color-code-bg); border-radius: var(--radius); text-align: center; color: var(--color-text-secondary); font-size: 0.85rem;">
+                        <p>💡 所有资源均为课程配套材料，仅供学习交流使用。如需商业合作或定制培训，请通过关于页面联系。</p>
                     </div>
                 </div>
             </div>
